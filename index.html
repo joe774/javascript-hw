@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .main-box {
+            margin: 40px auto;
+            width: 700px;
+            height: 400px;
+            padding: 25px;
+            box-shadow: 5px 5px 10px #999;
+            border: 1px solid #fff;            
+            font-size: 1em;            
+        }
+
+        .write {
+            text-align: center;            
+        }
+
+        .but1 {
+            border-radius: 5px;
+            float: right;
+            color: white;
+            background-color: #0000E3;
+        }
+
+        .box {
+            text-align: center;
+            
+        }
+
+        .but2 {
+            border-radius: 5px;
+            color: white;
+            background-color: #FF2D2D;
+        }
+
+        .box1 {
+            margin: 20px auto;
+            width: 250px;
+            height: 50px;
+            padding: 10px;
+            box-shadow: 5px 5px 10px #999;
+            border: 1px solid #fff;
+            text-align: center;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .write2 {
+            text-align: center;
+        }
+
+        .but3 {
+            border-radius:5px;
+            background-color: #46A3FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-box">
+        <div class="write"><h2>猜數字遊戲</h2></div>
+        <button class="but1" onclick="calculate()" >重啟遊戲</button>
+        <br />
+        <div class="write1"><h4>玩家猜測數字</h4></div>
+        <div class="box">
+            <input type="text" size="10" id="number1" value="" onchange="ArryValue(0)" />
+            <input type="text" size="10" id="number2" value="" onchange="ArryValue(1)" />
+            <input type="text" size="10" id="number3" value="" onchange="ArryValue(2)" />
+            <input type="text" size="10" id="number4" value="" onchange="ArryValue(3)" />
+            <input type="text" size="10" id="number5" value="" onchange="ArryValue(4)" />
+        </div>
+        <br />
+        <div>
+            <button class="but2" style="display:block;margin:0 auto" onclick="result()">檢視猜測結果</button>
+        </div>
+        <div class="box1" id="box1"></div>
+        <div class="write2">
+            <button class="but3" onclick="number()">顯示莊家數字</button>
+            <input type="text" size="20" id="number6" value="" />
+        </div>
+    </div>
+    <script>
+        var playnum = []
+        var bossnum = []
+        function calculate() {
+            for (var i = 0; i < 6; i++) {
+                var id = 'number' + (i + 1);
+                document.getElementById(id
+                ).value = '';
+            }
+            playnum = [];
+            bossnum = [];
+            document.getElementById('box1').innerHTML = "";
+        }
+
+        function ArryValue(index) {
+            var id = 'number' + (index + 1);
+            var checkValue = document.getElementById(id).value;
+            var getid = document.getElementById(id);
+            if (playnum.includes(checkValue)) {               
+                alert('請勿重複輸入');
+                getid.click();
+                getid.focus();
+                getid.value = '';
+                return;
+            }            
+            if (checkValue >10) {
+                alert('數字僅限1~9');
+                getid.click();
+                getid.focus();
+                getid.value = '';
+                return;
+            }
+            playnum[index] = checkValue;
+        }
+        //console.log(playnum)
+
+        function result() {
+            for (var i = 0; i < 5; i++) {
+                var id = "number" + (i + 1);
+                playnum[i] = document.getElementById(id).value;
+            }
+            playnum.sort();
+            if (playnum.includes("")) {
+                alert("請將空格填滿");
+                return;
+            }
+
+
+            while (bossnum.length < 5) {
+                var rnum = Math.floor(Math.random() * 9 + 1).toString();
+                    if (!bossnum.includes(rnum)) {
+                        bossnum.push(rnum);
+                    }
+                }
+                //console.log(bossnum);
+            let result = playnum.filter((e) => bossnum.includes(e));
+            result.sort();
+
+
+            document.getElementById("box1").innerHTML = `您猜對的數字有${result}<br/>共猜對${result.length}個數字`
+        }
+
+        function isRepeat(a) {
+            return bossnum.includes(a);
+        }
+
+        function number() {            
+            var answerStr = bossnum.sort().join(',');
+            var val = document.getElementById("number6");
+
+            if (val.value == "") {
+                val.value = `莊家的數字${answerStr}`;
+            } else {
+                val.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
